@@ -74,6 +74,7 @@ public class MusicMgr : BaseManager<MusicMgr>
         if (soundObj == null) {
             soundObj = new GameObject();
             soundObj.name = "Sounds";
+            GameObject.DontDestroyOnLoad(soundObj);
         }
         AudioSource source=soundObj.AddComponent<AudioSource>();
         ResMgr.GetInstance().LoadAsync<AudioClip>("Music/Sounds/" + name, (clip) => {
@@ -89,6 +90,8 @@ public class MusicMgr : BaseManager<MusicMgr>
             }
         });
     }
+    
+    
     //改变所有音效大小
     public void ChangeSoundValue(float value) {
         soundVaule = value;
