@@ -31,4 +31,13 @@ public class MonoMgr : BaseManager<MonoMgr>
     public Coroutine StartCoroutine(string methodName) {
         return controller.StartCoroutine(methodName);
     }
+    public void StopCoroutine(Coroutine e)
+    {
+        controller.StopCoroutine(e);
+    }
+
+    public void StopAllCoroutines()
+    {
+        controller.StopAllCoroutines();
+    }
 }

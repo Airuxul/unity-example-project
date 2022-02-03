@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using LitJson;
 using UnityEngine;
+using UnityEngine.Events;
+using Object = System.Object;
 
 /// <summary>
 /// 测试类
@@ -20,7 +23,6 @@ public class TestScene : MonoBehaviour
 {
     void Start()
     {
-       UIManager.GetInstance().ShowPanel<TestPanel>("TestPanel");
+        UIManager.GetInstance().ShowPanel<TestPanel>("TestPanel");
     }
-    
 }
