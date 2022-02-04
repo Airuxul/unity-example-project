@@ -9,8 +9,15 @@ public class TestPanel : BasePanel
     
     private InputField firstNameInputField;
     private InputField secondNameInputField;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Debug.Log("TestPanelAwake");
+    }
     void Start()
     {
+        Debug.Log("TestPanelStartFunc");
         firstNameInputField=GetControl<InputField>("FirstNameInputField");
         secondNameInputField = GetControl<InputField>("SecondNameInputField");
         GetControl<Button>("SaveButton").onClick.AddListener(() =>

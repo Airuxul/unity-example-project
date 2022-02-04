@@ -12,7 +12,7 @@ public class BasePanel : MonoBehaviour
     //通过里式转换原则，来存储所有的UI控件
     private Dictionary<string, List<UIBehaviour>> controlDic 
         = new Dictionary<string, List<UIBehaviour>>();
-    private void Awake()
+    protected  virtual void Awake()
     {
         FindChildControl<Button>();
         FindChildControl<Image>();

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -31,7 +30,8 @@ public class DelayMgr : BaseManager<DelayMgr>
             {
                 if (lineName == DefaultLineName)
                 {
-                    Debug.LogError("不该删除默认延迟Line");
+                    Debug.LogError("不允许删除默认延迟Line");
+                    return;
                 }
                 _delayLines[lineName].Dispose();
                 _delayLines.Remove(lineName);
@@ -53,15 +53,7 @@ public class DelayMgr : BaseManager<DelayMgr>
         }
 
         #region 添加延迟事件
-        public void AddDelayAction(UnityAction action, float time)
-        {
-            _delayLines[DefaultLineName].AddDelayAction(action, time);
-        }
-        public void AddDelayAction<T>(UnityAction<T> action, float time)
-        {
-            _delayLines[DefaultLineName].AddDelayAction(action, time);
-        }
-        public void AddDelayAction(string lineName, UnityAction action, float time)
+         public void AddDelayAction( UnityAction action, float time,string lineName=DefaultLineName)
         {
             if (_delayLines.ContainsKey(lineName))
             {
@@ -73,7 +65,7 @@ public class DelayMgr : BaseManager<DelayMgr>
             }
             
         }
-        public void AddDelayAction<T>(string lineName, UnityAction<T> action, float time)
+        public void AddDelayAction<T>( UnityAction<T> action, float time,string lineName=DefaultLineName)
         {
             if (_delayLines.ContainsKey(lineName))
             {
@@ -87,16 +79,7 @@ public class DelayMgr : BaseManager<DelayMgr>
         #endregion
 
         #region 实现延迟事件
-        public void InvokeDelayActions()
-        {
-            _delayLines[DefaultLineName].InvokeDelayActions();
-        }
-        public void InvokeDelayActions<T>(T[] info)
-        {
-            
-            _delayLines[DefaultLineName].InvokeDelayActions(info);
-        }
-        public void InvokeDelayActions(string lineName)
+    public void InvokeDelayActions(string lineName=DefaultLineName)
         {
             if (_delayLines.ContainsKey(lineName))
             {
@@ -107,7 +90,7 @@ public class DelayMgr : BaseManager<DelayMgr>
                 Debug.LogError("没有\""+lineName+"\"该延迟Line");
             }
         }
-        public void InvokeDelayActions<T>(string lineName, T[] info)
+        public void InvokeDelayActions<T>(T[] info ,string lineName=DefaultLineName)
         {
             if (_delayLines.ContainsKey(lineName))
             {
