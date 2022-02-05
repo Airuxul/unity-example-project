@@ -26,21 +26,6 @@ public class TestScene : MonoBehaviour
     void Start()
     {
         UIManager.GetInstance().ShowPanel<TestPanel>("Test","TestPanel");
-        ua1 = new UnityAction(NoonVoid);
-        ua2 = new UnityAction(NoonVoid);
-        creat1();
-        creat2();
-
-    }
-    static void NoonVoid() {}
-    void creat1()
-    {
-        UnityAction ua3 = new UnityAction(NoonVoid);
-        ua1 +=ua3;
-    }
-    void creat2()
-    {
-        ua2 += NoonVoid;
     }
 
 }
