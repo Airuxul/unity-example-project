@@ -70,7 +70,6 @@ public class UIManager : BaseManager<UIManager>
             //把它作为Canvas的子对象
             //并且设置它的相对位置
             //找到父对象
-            Debug.Log("生成回调函数");
             if (obj == null)
             {
                 Debug.LogError(typeof(T)+"动态生成错误，查看预制体以及脚本路径名是否有误\n" +

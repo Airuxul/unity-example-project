@@ -1,103 +1,107 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
-//抽屉数据，池子中的一列容器
-public class PoolData
+
+public interface IObjectPool<T> where T : Object
 {
-    //抽屉中，对象挂载的父节点
-    public GameObject fatherObj;
-    //对象的容器
-    public List<GameObject> poolList;
+    public void PushObj(T obj);
+    public T GetObj();
+    public bool doHava();
+}
+public abstract class ObjectPool<T> : IObjectPool<T> where T : Object
+{
+    protected readonly Queue<T> objQueuePool;
 
-    public PoolData(GameObject obj, GameObject poolObj)
+    protected ObjectPool()
     {
-        //根据obj创建一个同名父类空物体，它的父物体为总Pool空物体
-        fatherObj = new GameObject(obj.name);
-        fatherObj.transform.parent = poolObj.transform;
-
-        poolList =  new List<GameObject>() {  };
-
-        PushObj(obj);
+        objQueuePool = new Queue<T>();
     }
-
-    //像抽屉里面压东西并且设置好父对象
-    public void PushObj(GameObject obj)
+    public virtual void PushObj(T obj)
     {
-        //存起来
-        poolList.Add(obj);
-        //设置父对象
-        obj.transform.parent = fatherObj.transform;
-        //失活，让其隐藏
+        objQueuePool.Enqueue(obj);
+    }
+    public virtual T GetObj() { return default;}
+    public virtual bool doHava()
+    {
+        return objQueuePool.Count >0 ? true : false;
+    }
+}
+public class GameObjectPool : ObjectPool<GameObject>
+{
+    private GameObject fatherGameObject;
+    public GameObjectPool(GameObject poolRoot,string poolRootName)
+    {
+        fatherGameObject = new GameObject
+        {
+            name = poolRootName+"s-Pool"
+        };
+        fatherGameObject.transform.SetParent(poolRoot.transform);
+    }
+    public override void PushObj(GameObject obj)
+    {
+        base.PushObj(obj);
+        obj.transform.SetParent(fatherGameObject.transform);
         obj.SetActive(false);
     }
-
-    //像抽屉中取东西
-    public GameObject GetObj() {
-        GameObject obj = null;
-        //取出第一个
-        obj = poolList[0];
-        poolList.RemoveAt(0);
-        //激活，让其展示
-        obj.SetActive(true);
-        //断开父子关系
-        obj.transform.parent = null;
-
-        return obj;
+    public override GameObject GetObj()
+    {
+        GameObject gameObject;
+        gameObject = objQueuePool.Dequeue();
+        gameObject.transform.SetParent(null);
+        gameObject.SetActive(true);
+        return gameObject;
     }
 }
 
 
 public class PoolMgr : BaseManager<PoolMgr>
 {
-    //这里是缓存池模块
+    public Dictionary<string,GameObjectPool> GameObjectPoolDic
+        =new Dictionary<string, GameObjectPool>();
 
-    //创建字段存储容器
-    public Dictionary<string, PoolData> pool1Dic
-        =new Dictionary<string, PoolData>();
-
-    private GameObject poolObj;
-
+    private GameObject poolFather;
     //取得游戏物体
-    public void GetObj(string name,UnityAction<GameObject> callback) {
-        if (pool1Dic.ContainsKey(name) && pool1Dic[name].poolList.Count > 0)
+    public GameObject GetObj(string name) {
+        if (GameObjectPoolDic.ContainsKey(name) && GameObjectPoolDic[name].doHava())
         {
-            //拖过委托返回给外部，让外部进行使用
-            callback(pool1Dic[name].GetObj());
+            return GameObjectPoolDic[name].GetObj();
         }
-        else {
+        else{
             //缓存池中没有该物体，我们去目录中加载
             //外面传一个预设体的路径和名字，我内部就去加载它
-            ResMgr.GetInstance().LoadAsync<GameObject>(name,(o)=> {
-                o.name = name;
-                callback(o);
-            });
+            GameObject gameObject=ResMgr.GetInstance().Load<GameObject>(name);
+            gameObject.name = name;
+            return gameObject;
         }
     }
 
     //外界返还游戏物体
     public void PushObj(string name,GameObject obj) {
-        if (poolObj == null)
+        if (poolFather == null)
         {
-            poolObj = new GameObject("Pool");
-
+            poolFather = new GameObject("GameObjectPool");
         }
         //里面有记录这个键
-        if (pool1Dic.ContainsKey(name))
+        if (GameObjectPoolDic.ContainsKey(name))
         {
-            pool1Dic[name].PushObj(obj);
+            GameObjectPoolDic[name].PushObj(obj);
         }
         //未曾记录这个键
         else {
-            pool1Dic.Add(name, new PoolData(obj,poolObj) { });
+            GameObjectPoolDic.Add(name, new GameObjectPool(poolFather,name));
+            GameObjectPoolDic[name].PushObj(obj);
         }
     }
     
     //清空缓存池的方法
     //主要用在场景切换时
     public void Clear() {
-        pool1Dic.Clear();
-        poolObj = null;
+        GameObjectPoolDic.Clear();
+        poolFather = null;
     }
 }

@@ -10,7 +10,7 @@ Unity框架整理，主要是唐老师框架以及其他地方整理，并结合
 3. JsonDataMgr，json信息模块（详细信息√
 4. MonoMgr，mono模块（详细信息√
 5. MusicMgr，音乐模块（详细信息√，修改√
-6. PoolMgr，缓存池模块（详细信息X，增加除GameObject的缓存池X
+6. PoolMgr，缓存池模块（详细信息√，拓展ing
 7. ResMgr，Resource加载模块（详细信息√
 8. ScenesMgr，场景加载模块（详细信息√
 9. UIManager，UI模块（详细信息√

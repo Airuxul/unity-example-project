@@ -6,18 +6,18 @@ using UnityEngine.UI;
 
 public class TestPanel : BasePanel
 {
-    
+
+    private Queue<GameObject> testPoolQueue = new Queue<GameObject>();
+
     private InputField firstNameInputField;
     private InputField secondNameInputField;
 
     protected override void Awake()
     {
         base.Awake();
-        Debug.Log("TestPanelAwake");
     }
     void Start()
     {
-        Debug.Log("TestPanelStartFunc");
         firstNameInputField=GetControl<InputField>("FirstNameInputField");
         secondNameInputField = GetControl<InputField>("SecondNameInputField");
         GetControl<Button>("SaveButton").onClick.AddListener(() =>
@@ -37,6 +37,17 @@ public class TestPanel : BasePanel
                 secondNameInputField.text = p.secondName;
             }
            
+        });
+        GetControl<Button>("GetButton").onClick.AddListener(() =>
+        {
+            testPoolQueue.Enqueue(PoolMgr.GetInstance().GetObj("PoolTest"));
+        });
+        GetControl<Button>("PushButton").onClick.AddListener(() =>
+        {
+            if (testPoolQueue.Count != 0)
+            {
+                PoolMgr.GetInstance().PushObj("PoolTest",testPoolQueue.Dequeue());
+            }
         });
     }
 }
