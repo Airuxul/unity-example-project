@@ -12,10 +12,7 @@ public class TestPanel : BasePanel
     private InputField firstNameInputField;
     private InputField secondNameInputField;
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    public SceneTransitionEffect sceneTransitionEffect;
     void Start()
     {
         firstNameInputField=GetControl<InputField>("FirstNameInputField");
@@ -52,7 +49,11 @@ public class TestPanel : BasePanel
         GetControl<Button>("PlaySoundButton").onClick.AddListener(() =>
             {
                 MusicMgr.GetInstance().PlaySound("1",false);
-            }
-            );
+            });
+        GetControl<Button>("TransitionButton").onClick.AddListener(() =>
+        {
+            if (Camera.main is {})
+                Camera.main.GetComponent<SceneTransitionEffect>().Play();
+        });
     }
 }

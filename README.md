@@ -15,6 +15,7 @@ Unity框架整理，主要是唐老师框架以及其他地方整理，并结合
 8. ScenesMgr，场景加载模块（详细信息√
 9. UIManager，UI模块（详细信息√
 10. DelayMgr，延时模块（详细信息√
+11. Shader部分（屏幕后处理基础模块√，shader提示√，场景过渡基类 -看情况更新
 
 具体的信息，都会在对应的脚本旁有个.md文件进行大致的说明
 
@@ -22,5 +23,7 @@ Unity框架整理，主要是唐老师框架以及其他地方整理，并结合
 
 ### 参考
 
-1. [唐老师B站](https://space.bilibili.com/79983517)
-
+1. [唐老师框架B站地址](https://space.bilibili.com/79983517)
+2. [场景过渡制作](https://www.bilibili.com/video/BV1Nu411d7Uk)
+3. [Json模块参考](https://www.bilibili.com/video/BV1Nv411G7rT)
+4. [延时参考](https://www.bilibili.com/video/BV1kR4y1p72J)
