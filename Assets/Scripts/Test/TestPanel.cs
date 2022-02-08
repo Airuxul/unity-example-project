@@ -49,5 +49,10 @@ public class TestPanel : BasePanel
                 PoolMgr.GetInstance().PushObj("PoolTest",testPoolQueue.Dequeue());
             }
         });
+        GetControl<Button>("PlaySoundButton").onClick.AddListener(() =>
+            {
+                MusicMgr.GetInstance().PlaySound("1",false);
+            }
+            );
     }
 }

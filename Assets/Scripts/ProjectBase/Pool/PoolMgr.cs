@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Resources;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
@@ -31,6 +28,7 @@ public abstract class ObjectPool<T> : IObjectPool<T> where T : Object
         return objQueuePool.Count >0 ? true : false;
     }
 }
+
 public class GameObjectPool : ObjectPool<GameObject>
 {
     private GameObject fatherGameObject;

@@ -3,6 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class AudioSourcePool:ObjectPool<AudioSource>
+{
+    private GameObject soundObj;
+    public AudioSourcePool(GameObject _soundObj)
+    {
+        soundObj = _soundObj;
+    }
+    public override void PushObj(AudioSource obj)
+    {
+        base.PushObj(obj);
+        obj.enabled = false;
+
+    }
+    public override AudioSource GetObj()
+    {
+        AudioSource audioSource;
+        if (doHava())
+        {
+            audioSource=objQueuePool.Dequeue();
+            audioSource.enabled = true;
+        }
+        else
+        {
+            audioSource=soundObj.AddComponent<AudioSource>();
+        }
+        return audioSource;
+    }
+}
+
 public class MusicMgr : BaseManager<MusicMgr>
 {
     private AudioSource bkMusic = null;
@@ -14,14 +43,17 @@ public class MusicMgr : BaseManager<MusicMgr>
     private GameObject soundObj = null;
     private List<AudioSource> soundList = new List<AudioSource>();
 
-
+    private AudioSourcePool audioSourcePool;
     public MusicMgr() {
         MonoMgr.GetInstance().AddUpdateListener(update);
+        GameObject obj = new GameObject("Sounds");
+        GameObject.DontDestroyOnLoad(obj);
+        audioSourcePool = new AudioSourcePool(obj);
     }
     private void update() {
         for (int i = soundList.Count-1; i >= 0; i--) {
             if (!soundList[i].isPlaying) {
-                GameObject.Destroy(soundList[i]);
+                audioSourcePool.PushObj(soundList[i]);
                 soundList.RemoveAt(i);
             }
         }
@@ -70,13 +102,9 @@ public class MusicMgr : BaseManager<MusicMgr>
 
 
     //播放音效
-    public void PlaySound(string name,bool isLoop,UnityAction<AudioSource> callback=null ) {
-        if (soundObj == null) {
-            soundObj = new GameObject();
-            soundObj.name = "Sounds";
-            GameObject.DontDestroyOnLoad(soundObj);
-        }
-        AudioSource source=soundObj.AddComponent<AudioSource>();
+    public void PlaySound(string name,bool isLoop,UnityAction<AudioSource> callback=null )
+    {
+        AudioSource source = audioSourcePool.GetObj();
         ResMgr.GetInstance().LoadAsync<AudioClip>("Music/Sounds/" + name, (clip) => {
             source.clip = clip;
             source.loop = isLoop;
@@ -104,7 +132,7 @@ public class MusicMgr : BaseManager<MusicMgr>
         if (soundList.Contains(source)) {
             soundList.Remove(source);
             source.Stop();
-            GameObject.Destroy(source);
+            audioSourcePool.PushObj(source);
         }
     }
 }
