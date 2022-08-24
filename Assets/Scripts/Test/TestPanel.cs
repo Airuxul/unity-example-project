@@ -11,8 +11,7 @@ public class TestPanel : BasePanel
 
     private InputField firstNameInputField;
     private InputField secondNameInputField;
-
-    public SceneTransitionEffect sceneTransitionEffect;
+    
     void Start()
     {
         firstNameInputField=GetControl<InputField>("FirstNameInputField");
@@ -46,14 +45,10 @@ public class TestPanel : BasePanel
                 PoolMgr.GetInstance().PushObj("PoolTest",testPoolQueue.Dequeue());
             }
         });
-        GetControl<Button>("PlaySoundButton").onClick.AddListener(() =>
+        GetControl<Button>("PlaySoundButton").onClick.AddListener(() => 
             {
                 MusicMgr.GetInstance().PlaySound("1",false);
-            });
-        GetControl<Button>("TransitionButton").onClick.AddListener(() =>
-        {
-            if (Camera.main is {})
-                Camera.main.GetComponent<SceneTransitionEffect>().Play();
-        });
+            }
+            );
     }
 }

@@ -6,9 +6,9 @@ using Object = UnityEngine.Object;
 
 public interface IObjectPool<T> where T : Object
 {
-    public void PushObj(T obj);
-    public T GetObj();
-    public bool doHava();
+    void PushObj(T obj);
+    T GetObj();
+    bool doHava();
 }
 public abstract class ObjectPool<T> : IObjectPool<T> where T : Object
 {
