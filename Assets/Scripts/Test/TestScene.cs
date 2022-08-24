@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using LitJson;
+using FrameWork;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = System.Object;
 
 /// <summary>
 /// 测试类
@@ -23,9 +20,15 @@ public class TestScene : MonoBehaviour
 {
     private UnityAction ua1;
     private UnityAction ua2;
+
+    private void Awake()
+    {
+        AppFacade.Instance.SetupManager();
+    }
+
     void Start()
     {
-        UIManager.GetInstance().ShowPanel<TestPanel>("Test","TestPanel");
+        AppFacade.UIMgr.ShowPanel<TestPanel>("Test","TestPanel");
     }
 
 }

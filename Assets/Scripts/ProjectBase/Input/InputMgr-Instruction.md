@@ -1,1 +1,0 @@
-﻿InputMgr结合EventCenter将按键事件注册，其他地方需要调用则增加监听就可以，现在Unity内部的InputSystem对于玩家按键也很方便绑定就是了，虽然我不常用就是了。
