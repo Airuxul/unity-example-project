@@ -8,6 +8,7 @@ namespace FrameWork
     public class AppFacade:Singleton<AppFacade>
     {
         #region Managers
+        public static LuaMgr LuaMgr { get; private set; }
         //可能需要重构一次
         public static MonoMgr MonoMgr { get; private set; }
         
@@ -29,7 +30,7 @@ namespace FrameWork
         
         public static InputMgr InputMgr { get; private set; }
 
-        private List<IManager> mgrs;
+        private List<IManager> mgrs=new List<IManager>();
         #endregion
         
         public void SetupManager()
@@ -39,6 +40,7 @@ namespace FrameWork
             EventMgr = AddManager<EventMgr>();
             
             //依赖MonoMgr
+            LuaMgr = AddManager<LuaMgr>();
             ResMgr = AddManager<ResMgr>();
             DelayMgr = AddManager<DelayMgr>();
             

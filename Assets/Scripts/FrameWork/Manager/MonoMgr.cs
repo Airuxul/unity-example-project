@@ -17,8 +17,8 @@ namespace FrameWork.Manager
         public void AddUpdateListener(UnityAction func)
         {
             controller.AddUpdateListener(func);
-
         }
+
         public void RemoveUpdateListener(UnityAction func)
         {
             controller.RemoveUpdateListener(func);

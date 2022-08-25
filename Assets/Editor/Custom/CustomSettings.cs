@@ -6,6 +6,10 @@ using UnityEditor;
 
 using BindType = ToLuaMenu.BindType;
 using System.Reflection;
+using FrameWork;
+using FrameWork.Manager;
+using GameApp.ToLuaExpand;
+using Utility;
 
 public static class CustomSettings
 {
@@ -150,6 +154,19 @@ public static class CustomSettings
         _GT(typeof(RenderTexture)),
         _GT(typeof(Resources)),     
         _GT(typeof(LuaProfiler)),
+        
+        //Util
+        _GT(typeof(Utils)),
+        
+        //AppFacade
+        _GT(typeof(AppFacade)),
+        //Manager
+        _GT(typeof(MonoMgr)),
+        
+        
+        //LuaBehaviour
+        _GT(typeof(LuaBehaviour)).AddExtendType(typeof(LuaValueBinderImpl)),
+        _GT(typeof(BindableValue)),
     };
 
     public static List<Type> dynamicList = new List<Type>()

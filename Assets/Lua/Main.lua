@@ -1,13 +1,11 @@
---主入口函数。从这里开始lua逻辑
-function Main()					
-	print("logic start")	 		
-end
+-- 加载常用模块
+require("LuaUtils")
+require("Adapter")
 
---场景切换通知
-function OnLevelWasLoaded(level)
-	collectgarbage("collect")
-	Time.timeSinceLevelLoad = 0
-end
+AppFacade = FrameWork.AppFacade.Instance
 
-function OnApplicationQuit()
+if AppFacade == nil then
+    print("AppFacade is nil")
+else
+    print(LuaUtils.Table2Str(AppFacade))
 end
