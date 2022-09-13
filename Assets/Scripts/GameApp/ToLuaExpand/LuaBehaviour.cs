@@ -1,5 +1,7 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace GameApp.ToLuaExpand
 {
@@ -8,9 +10,14 @@ namespace GameApp.ToLuaExpand
         [SerializeField] private string _luaPath;
         public string LuaPath => _luaPath;
         
-        [SerializeField] private BindableValue _val;
-        public BindableValue Val => _val;
-        
+        [SerializeReference] 
+        private List<AbstractValue> _val;
+        public List<AbstractValue> Val => _val;
+
+        public IEnumerator GetValueEnumerator()
+        {
+            return Val.GetEnumerator();
+        } 
         public bool HaveInit { get; set; }
 
         private void Awake()
@@ -26,13 +33,11 @@ namespace GameApp.ToLuaExpand
 
         private void OnEnable()
         {
-            Debug.LogError("OnEnable");
             this.CallLuaFunc("OnEnable");
         }
 
         private void OnDisable()
         {
-            Debug.LogError("OnDisable");
             this.CallLuaFunc("OnDisable");
         }
 
@@ -52,6 +57,5 @@ namespace GameApp.ToLuaExpand
         {
             this.CallLuaFunc("OnApplicationFocus", focusStatus);
         }
-        
     }
 }

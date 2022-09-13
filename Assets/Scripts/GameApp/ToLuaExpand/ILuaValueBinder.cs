@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace GameApp.ToLuaExpand
 {
     public interface ILuaValueBinder
     {
-        BindableValue Val { get; }
+        List<AbstractValue> Val { get; }
         string LuaPath { get; }
         bool HaveInit { get; set; }
     }

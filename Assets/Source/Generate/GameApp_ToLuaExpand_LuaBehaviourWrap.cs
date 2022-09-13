@@ -8,6 +8,7 @@ public class GameApp_ToLuaExpand_LuaBehaviourWrap
 	public static void Register(LuaState L)
 	{
 		L.BeginClass(typeof(GameApp.ToLuaExpand.LuaBehaviour), typeof(UnityEngine.MonoBehaviour));
+		L.RegFunction("GetValueEnumerator", GetValueEnumerator);
 		L.RegFunction("CallLuaFunc", CallLuaFunc);
 		L.RegFunction("Init", Init);
 		L.RegFunction("__eq", op_Equality);
@@ -16,6 +17,23 @@ public class GameApp_ToLuaExpand_LuaBehaviourWrap
 		L.RegVar("Val", get_Val, null);
 		L.RegVar("HaveInit", get_HaveInit, set_HaveInit);
 		L.EndClass();
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetValueEnumerator(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			GameApp.ToLuaExpand.LuaBehaviour obj = (GameApp.ToLuaExpand.LuaBehaviour)ToLua.CheckObject<GameApp.ToLuaExpand.LuaBehaviour>(L, 1);
+			System.Collections.IEnumerator o = obj.GetValueEnumerator();
+			ToLua.Push(L, o);
+			return 1;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -97,8 +115,8 @@ public class GameApp_ToLuaExpand_LuaBehaviourWrap
 		{
 			o = ToLua.ToObject(L, 1);
 			GameApp.ToLuaExpand.LuaBehaviour obj = (GameApp.ToLuaExpand.LuaBehaviour)o;
-			GameApp.ToLuaExpand.BindableValue ret = obj.Val;
-			ToLua.PushObject(L, ret);
+			System.Collections.Generic.List<GameApp.ToLuaExpand.AbstractValue> ret = obj.Val;
+			ToLua.PushSealed(L, ret);
 			return 1;
 		}
 		catch(Exception e)

@@ -21,6 +21,7 @@ public class DelegateFactory
 		dict.Add(typeof(UnityEngine.Events.UnityAction), factory.UnityEngine_Events_UnityAction);
 		dict.Add(typeof(System.Predicate<int>), factory.System_Predicate_int);
 		dict.Add(typeof(System.Action<int>), factory.System_Action_int);
+		dict.Add(typeof(System.Action<GameApp.ToLuaExpand.AbstractValue>), factory.System_Action_GameApp_ToLuaExpand_AbstractValue);
 		dict.Add(typeof(System.Comparison<int>), factory.System_Comparison_int);
 		dict.Add(typeof(System.Func<int,int>), factory.System_Func_int_int);
 		dict.Add(typeof(UnityEngine.Camera.CameraCallback), factory.UnityEngine_Camera_CameraCallback);
@@ -38,6 +39,7 @@ public class DelegateFactory
 		DelegateTraits<UnityEngine.Events.UnityAction>.Init(factory.UnityEngine_Events_UnityAction);
 		DelegateTraits<System.Predicate<int>>.Init(factory.System_Predicate_int);
 		DelegateTraits<System.Action<int>>.Init(factory.System_Action_int);
+		DelegateTraits<System.Action<GameApp.ToLuaExpand.AbstractValue>>.Init(factory.System_Action_GameApp_ToLuaExpand_AbstractValue);
 		DelegateTraits<System.Comparison<int>>.Init(factory.System_Comparison_int);
 		DelegateTraits<System.Func<int,int>>.Init(factory.System_Func_int_int);
 		DelegateTraits<UnityEngine.Camera.CameraCallback>.Init(factory.UnityEngine_Camera_CameraCallback);
@@ -55,6 +57,7 @@ public class DelegateFactory
 		TypeTraits<UnityEngine.Events.UnityAction>.Init(factory.Check_UnityEngine_Events_UnityAction);
 		TypeTraits<System.Predicate<int>>.Init(factory.Check_System_Predicate_int);
 		TypeTraits<System.Action<int>>.Init(factory.Check_System_Action_int);
+		TypeTraits<System.Action<GameApp.ToLuaExpand.AbstractValue>>.Init(factory.Check_System_Action_GameApp_ToLuaExpand_AbstractValue);
 		TypeTraits<System.Comparison<int>>.Init(factory.Check_System_Comparison_int);
 		TypeTraits<System.Func<int,int>>.Init(factory.Check_System_Func_int_int);
 		TypeTraits<UnityEngine.Camera.CameraCallback>.Init(factory.Check_UnityEngine_Camera_CameraCallback);
@@ -72,6 +75,7 @@ public class DelegateFactory
 		StackTraits<UnityEngine.Events.UnityAction>.Push = factory.Push_UnityEngine_Events_UnityAction;
 		StackTraits<System.Predicate<int>>.Push = factory.Push_System_Predicate_int;
 		StackTraits<System.Action<int>>.Push = factory.Push_System_Action_int;
+		StackTraits<System.Action<GameApp.ToLuaExpand.AbstractValue>>.Push = factory.Push_System_Action_GameApp_ToLuaExpand_AbstractValue;
 		StackTraits<System.Comparison<int>>.Push = factory.Push_System_Comparison_int;
 		StackTraits<System.Func<int,int>>.Push = factory.Push_System_Func_int_int;
 		StackTraits<UnityEngine.Camera.CameraCallback>.Push = factory.Push_UnityEngine_Camera_CameraCallback;
@@ -415,6 +419,63 @@ public class DelegateFactory
 	}
 
 	void Push_System_Action_int(IntPtr L, System.Action<int> o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class System_Action_GameApp_ToLuaExpand_AbstractValue_Event : LuaDelegate
+	{
+		public System_Action_GameApp_ToLuaExpand_AbstractValue_Event(LuaFunction func) : base(func) { }
+		public System_Action_GameApp_ToLuaExpand_AbstractValue_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(GameApp.ToLuaExpand.AbstractValue param0)
+		{
+			func.BeginPCall();
+			func.PushObject(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(GameApp.ToLuaExpand.AbstractValue param0)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushObject(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public System.Action<GameApp.ToLuaExpand.AbstractValue> System_Action_GameApp_ToLuaExpand_AbstractValue(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			System.Action<GameApp.ToLuaExpand.AbstractValue> fn = delegate(GameApp.ToLuaExpand.AbstractValue param0) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			System_Action_GameApp_ToLuaExpand_AbstractValue_Event target = new System_Action_GameApp_ToLuaExpand_AbstractValue_Event(func);
+			System.Action<GameApp.ToLuaExpand.AbstractValue> d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			System_Action_GameApp_ToLuaExpand_AbstractValue_Event target = new System_Action_GameApp_ToLuaExpand_AbstractValue_Event(func, self);
+			System.Action<GameApp.ToLuaExpand.AbstractValue> d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_System_Action_GameApp_ToLuaExpand_AbstractValue(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(System.Action<GameApp.ToLuaExpand.AbstractValue>), L, pos);
+	}
+
+	void Push_System_Action_GameApp_ToLuaExpand_AbstractValue(IntPtr L, System.Action<GameApp.ToLuaExpand.AbstractValue> o)
 	{
 		ToLua.Push(L, o);
 	}

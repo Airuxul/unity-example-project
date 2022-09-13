@@ -10,6 +10,7 @@ using FrameWork;
 using FrameWork.Manager;
 using GameApp.ToLuaExpand;
 using Utility;
+using Object = UnityEngine.Object;
 
 public static class CustomSettings
 {
@@ -42,6 +43,7 @@ public static class CustomSettings
         _DT(typeof(UnityEngine.Events.UnityAction)),
         _DT(typeof(System.Predicate<int>)),
         _DT(typeof(System.Action<int>)),
+        _DT(typeof(System.Action<AbstractValue>)),
         _DT(typeof(System.Comparison<int>)),
         _DT(typeof(System.Func<int, int>)),
     };
@@ -108,7 +110,6 @@ public static class CustomSettings
         _GT(typeof(Texture2D)),
         _GT(typeof(Shader)),        
         _GT(typeof(Renderer)),
-        _GT(typeof(WWW)),
         _GT(typeof(Screen)),        
         _GT(typeof(CameraClearFlags)),
         _GT(typeof(AudioClip)),        
@@ -117,9 +118,6 @@ public static class CustomSettings
         _GT(typeof(AsyncOperation)).SetBaseType(typeof(System.Object)),        
         _GT(typeof(LightType)),
         _GT(typeof(SleepTimeout)),
-#if UNITY_5_3_OR_NEWER && !UNITY_5_6_OR_NEWER
-        _GT(typeof(UnityEngine.Experimental.Director.DirectorPlayer)),
-#endif
         _GT(typeof(Animator)),
         _GT(typeof(Input)),
         _GT(typeof(KeyCode)),
@@ -166,7 +164,14 @@ public static class CustomSettings
         
         //LuaBehaviour
         _GT(typeof(LuaBehaviour)).AddExtendType(typeof(LuaValueBinderImpl)),
-        _GT(typeof(BindableValue)),
+
+        _GT(typeof(AbstractValue)),
+        _GT(typeof(IntValue)).SetBaseType(typeof(AbstractValue)),
+        _GT(typeof(FloatValue)).SetBaseType(typeof(AbstractValue)),
+        _GT(typeof(StringValue)).SetBaseType(typeof(AbstractValue)),
+        _GT(typeof(Object)),
+        _GT(typeof(ObjectValue)).SetBaseType(typeof(AbstractValue))
+        
     };
 
     public static List<Type> dynamicList = new List<Type>()

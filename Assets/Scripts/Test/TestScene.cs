@@ -1,5 +1,6 @@
 using System;
 using FrameWork;
+using GameApp.ToLuaExpand;
 using UnityEngine;
 using UnityEngine.Events;
 /// <summary>
@@ -35,4 +36,5 @@ public class TestScene : MonoBehaviour
         AppFacade.LuaMgr.Lua.DoFile("Adapter.lua");
         _go = Instantiate(go);
     }
+    
 }

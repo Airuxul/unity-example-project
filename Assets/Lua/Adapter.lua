@@ -23,9 +23,11 @@ function Adapter.Init(binder, luaPath)
 end
 
 function Adapter.LoadData(luaCls)
-    -- BindableValue
-    local vals = luaCls.__binder.Val
-    
+    -- AbstractValue IEnumerator
+    local iter = luaCls.__binder:GetValueEnumerator()
+    while iter:MoveNext() do
+        luaCls[iter.Current.name] = iter.Current.value
+    end
 end
 
 function Adapter.Call(obj, method, ...)

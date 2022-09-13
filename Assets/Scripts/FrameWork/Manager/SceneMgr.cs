@@ -9,13 +9,13 @@ namespace FrameWork.Manager
     public class SceneMgr : BaseManager
     {
         //切换场景
-        public void LoadScene(string name,UnityAction func) {
+        public void LoadScene(string name,UnityAction func = null) {
             //场景同步加载
             SceneManager.LoadScene(name);
             //加载完成过后才会执行func
-            func();
+            func?.Invoke();
         }
-        public void LoadSceneAsyn(string name, UnityAction func) {
+        public void LoadSceneAsyn(string name, UnityAction func = null) {
             //公共Mono模块
             AppFacade.MonoMgr.StartCoroutine(ReallyLoadSceneAsyn(name,func));
         }
@@ -28,7 +28,7 @@ namespace FrameWork.Manager
                 yield return ao.progress;
             }
             //加载完成后执行func
-            func();
+            func?.Invoke();
         }
     }
 }
