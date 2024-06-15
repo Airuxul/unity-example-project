@@ -82,12 +82,11 @@ namespace FrameWork.Manager.UIManager
                 //设置相对位置和大小
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localScale = Vector3.one;
-                ((RectTransform)obj.transform).offsetMax = Vector2.zero;
-                ((RectTransform)obj.transform).offsetMin = Vector2.zero;
+                // ((RectTransform)obj.transform).offsetMax = Vector2.zero;
+                // ((RectTransform)obj.transform).offsetMin = Vector2.zero;
 
                 //得到预设体身上的脚本（继承自BasePanel）
                 var panelComp = obj.GetComponent<T>();
-                panelComp.config = panelConfig;
                 _panelDic.Add(panelName, panelComp);
                 //执行外面想要做的事情
                 callback?.Invoke(panelComp);
@@ -104,7 +103,7 @@ namespace FrameWork.Manager.UIManager
         }
 
         //删除面板
-        public void DestoryPanel(string panelName)
+        public void DestroyPanel(string panelName)
         {
             if (_panelDic.TryGetValue(panelName, out var panel))
             {
