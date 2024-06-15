@@ -8,57 +8,37 @@ namespace FrameWork
     public class AppFacade:Singleton<AppFacade>
     {
         #region Managers
-        public static LuaMgr LuaMgr { get; private set; }
-        //可能需要重构一次
-        public static MonoMgr MonoMgr { get; private set; }
+        public static MonoManager MonoManager { get; private set; }
         
-        public static JsonDataMgr JsonDataMgr { get; private set; }
+        public static EventManager EventManager { get; private set; }
         
-        public static EventMgr EventMgr { get; private set; }
+        public static ResManager ResManager { get; private set; }
         
-        public static ResMgr ResMgr { get; private set; }
-        
-        public static DelayMgr DelayMgr { get; private set; }
-        
-        public static SceneMgr ScenesMgr { get; private set; }
+        public static SceneManager ScenesManager { get; private set; }
         
         public static UIMgr UIMgr { get; private set; }
         
-        public static PoolMgr PoolMgr { get; private set; }
-
-        public static MusicMgr MusicMgr { get; private set; }
+        public static PoolManager PoolManager { get; private set; }
         
-        public static InputMgr InputMgr { get; private set; }
+        public static InputManager InputManager { get; private set; }
 
-        private List<IManager> mgrs=new List<IManager>();
+        private readonly List<IManager> _mgrs = new();
         #endregion
         
         public void SetupManager()
         {
-            MonoMgr = AddManager<MonoMgr>();
-            JsonDataMgr = AddManager<JsonDataMgr>();
-            EventMgr = AddManager<EventMgr>();
-            
-            //依赖MonoMgr
-            LuaMgr = AddManager<LuaMgr>();
-            ResMgr = AddManager<ResMgr>();
-            DelayMgr = AddManager<DelayMgr>();
-            
-            //依赖MonoMgr和EventMgr
-            ScenesMgr = AddManager<SceneMgr>();
-
-            //依赖ResMgr
+            MonoManager = AddManager<MonoManager>();
+            EventManager = AddManager<EventManager>();
+            ResManager = AddManager<ResManager>();
+            ScenesManager = AddManager<SceneManager>();
             UIMgr = AddManager<UIMgr>();
-            PoolMgr = AddManager<PoolMgr>();
-            
-            //依赖ResMgr和MonoMgr
-            MusicMgr = AddManager<MusicMgr>();
-            InputMgr = AddManager<InputMgr>();
+            PoolManager = AddManager<PoolManager>();
+            InputManager = AddManager<InputManager>();
         }
 
         public void InitAllManager()
         {
-            foreach (var mgr in mgrs)
+            foreach (var mgr in _mgrs)
             {
                 mgr.Init();
             }
@@ -66,7 +46,7 @@ namespace FrameWork
 
         public void DestroyAllManager()
         {
-            foreach (var mgr in mgrs)
+            foreach (var mgr in _mgrs)
             {
                 mgr.Destroy();
             }
@@ -75,7 +55,7 @@ namespace FrameWork
         private T AddManager<T>() where T : IManager
         {
             T mgr = Activator.CreateInstance<T>();
-            mgrs.Add(mgr);
+            _mgrs.Add(mgr);
             return mgr;
         }
     }

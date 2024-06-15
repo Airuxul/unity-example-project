@@ -4,35 +4,33 @@ using UnityEngine.Events;
 
 namespace FrameWork.Manager
 {
-    //Mono的管理者
     public class MonoController : MonoBehaviour
     {
-        private event UnityAction updateEvent;
+        private event UnityAction UpdateEvent;
+
         private void Start()
         {
-            //此对象不可移除
-            //从而方便别的对象找到该物体，从而获取脚本，从而添加方法
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
+
         private void Update()
         {
-            if (updateEvent != null) {
-                updateEvent();
-            }
+            UpdateEvent?.Invoke();
         }
-        //为外部提供的添加帧更新事件的方法
+
         public void AddUpdateListener(UnityAction func)
         {
-            updateEvent += func;
+            UpdateEvent += func;
         }
-        //为外部提供的移除帧更新事件的方法
-        public void RemoveUpdateListener(UnityAction func) {
-            updateEvent -= func;
+
+        public void RemoveUpdateListener(UnityAction func)
+        {
+            UpdateEvent -= func;
         }
 
         private void OnDestroy()
         {
-            updateEvent = null;
+            UpdateEvent = null;
         }
     }
 }
