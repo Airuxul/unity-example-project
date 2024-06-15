@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using FrameWork.Manager;
+using FrameWork.Manager.UIManager;
 using Utility;
 
 namespace FrameWork
 {
-    public class AppFacade:Singleton<AppFacade>
+    public static class AppFacade
     {
         #region Managers
         public static MonoManager MonoManager { get; private set; }
@@ -16,46 +17,46 @@ namespace FrameWork
         
         public static SceneManager ScenesManager { get; private set; }
         
-        public static UIMgr UIMgr { get; private set; }
+        public static UIManager UIManager { get; private set; }
         
         public static PoolManager PoolManager { get; private set; }
         
         public static InputManager InputManager { get; private set; }
 
-        private readonly List<IManager> _mgrs = new();
+        private static readonly List<IManager> Managers = new();
         #endregion
         
-        public void SetupManager()
+        public static void SetupManager()
         {
             MonoManager = AddManager<MonoManager>();
             EventManager = AddManager<EventManager>();
             ResManager = AddManager<ResManager>();
             ScenesManager = AddManager<SceneManager>();
-            UIMgr = AddManager<UIMgr>();
+            UIManager = AddManager<UIManager>();
             PoolManager = AddManager<PoolManager>();
             InputManager = AddManager<InputManager>();
         }
 
-        public void InitAllManager()
+        public static void InitAllManager()
         {
-            foreach (var mgr in _mgrs)
+            foreach (var mgr in Managers)
             {
                 mgr.Init();
             }
         }
 
-        public void DestroyAllManager()
+        public static void DestroyAllManager()
         {
-            foreach (var mgr in _mgrs)
+            foreach (var mgr in Managers)
             {
                 mgr.Destroy();
             }
         }
 
-        private T AddManager<T>() where T : IManager
+        private static T AddManager<T>() where T : IManager
         {
             T mgr = Activator.CreateInstance<T>();
-            _mgrs.Add(mgr);
+            Managers.Add(mgr);
             return mgr;
         }
     }

@@ -9,34 +9,46 @@ namespace FrameWork.Manager
     public class ResManager : BaseManager
     {
         //同步加载资源
-        public T Load<T>(string name) where T : Object
+        public T Load<T>(string path) where T : Object
         {
 #if UNITY_EDITOR
-            T res = AssetDatabase.LoadAssetAtPath<T>(name);
+            T res = AssetDatabase.LoadAssetAtPath<T>(path);
 #else
            // TODO:AssetBundle加载
 #endif
             // TODO:后续可能需要对GO进行处理
-            return res;
+            return res is GameObject ? Object.Instantiate(res) : res;
         }
 
         //异步加载资源 
-        public void LoadAsync<T>(string name, UnityAction<T> callback) where T : Object
+        public void LoadAsync<T>(string path, UnityAction<T> callback) where T : Object
         {
             //开启异步加载的协程
-            AppFacade.MonoManager.StartCoroutine(ReallyLoadAsync(name, callback));
+            AppFacade.MonoManager.StartCoroutine(ReallyLoadAsync(path, callback));
         }
 
-        private IEnumerator ReallyLoadAsync<T>(string name, UnityAction<T> callback) where T : Object
+        private IEnumerator ReallyLoadAsync<T>(string path, UnityAction<T> callback) where T : Object
         {
 #if UNITY_EDITOR
-            ResourceRequest r = Resources.LoadAsync<T>(name);
+            T res = AssetDatabase.LoadAssetAtPath<T>(path);
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(res, out string guid, out long localId);
+            var op = AssetDatabase.LoadObjectAsync(path, localId);
+            while (!op.isDone)
+            {
+                yield return null;
+            }
+
+            if (op.LoadedObject is GameObject)
+            {
+                callback(Object.Instantiate(op.LoadedObject) as T);
+            }
+            else
+            {
+                callback(op.LoadedObject as T);
+            }
 #else 
             // TODO:AssetBundle加载
 #endif
-            // TODO:后续可能需要对GO进行额外处理
-            yield return r;
-            callback(r.asset as T);
         }
     }
 }
