@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using FrameWork.Manager;
-using FrameWork.Manager.UIManager;
-using Utility;
 
 namespace FrameWork
 {
@@ -13,7 +11,7 @@ namespace FrameWork
         
         public static EventManager EventManager { get; private set; }
         
-        public static ResManager ResManager { get; private set; }
+        public static AssetLoadManager AssetLoadManager { get; private set; }
         
         public static SceneManager ScenesManager { get; private set; }
         
@@ -30,7 +28,7 @@ namespace FrameWork
         {
             MonoManager = AddManager<MonoManager>();
             EventManager = AddManager<EventManager>();
-            ResManager = AddManager<ResManager>();
+            AssetLoadManager = AddManager<AssetLoadManager>();
             ScenesManager = AddManager<SceneManager>();
             UIManager = AddManager<UIManager>();
             PoolManager = AddManager<PoolManager>();

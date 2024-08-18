@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:ListView focusable="true" style="height: 812px; background-color: rgb(42, 42, 42);" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgb(0, 0, 0); align-items: stretch; justify-content: flex-end;">
-        <ui:TextField picking-mode="Ignore" value="啊啊啊啊啊" focusable="true" style="height: auto; flex-direction: row; align-self: stretch; opacity: 1; visibility: visible; overflow: visible; align-items: flex-start; white-space: normal; text-overflow: clip; flex-wrap: wrap; justify-content: flex-start; font-size: 34px; -unity-text-align: upper-left; top: auto; min-height: auto; max-height: none;" />
-        <ui:Button text="发送" parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: nowrap; -unity-text-align: lower-center; width: 96px; align-self: flex-end; align-items: flex-end; font-size: 30px; -unity-font-style: bold; color: rgb(255, 255, 255);" />
-    </ui:VisualElement>
-</ui:UXML>

@@ -9,6 +9,8 @@ namespace FrameWork.Manager
     {
         private MonoController _controller;
 
+        public MonoController MonoController => _controller;
+
         public MonoManager()
         {
             var obj = new GameObject("MonoController");

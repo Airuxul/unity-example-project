@@ -7,9 +7,10 @@ public class StartUp : MonoBehaviour
     void Awake()
     {
         AppFacade.SetupManager();
-        AppFacade.UIManager.ShowPanel<TestPanel>(testPanel =>
+        AppFacade.UIManager.ShowPanel<StartPanel>(startPanel =>
         {
-            testPanel.Test();
+            
         });
+        // 使用job system创建100个物体
     }
 }

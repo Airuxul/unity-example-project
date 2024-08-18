@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using UI.Panel;
-using FrameWork.Manager.UIManager;
+using FrameWork.Manager;
 
 namespace UI
 {
     public class PanelConfig
     {
-        public readonly Type panelType;
-        public readonly string prefabPath;
-        public readonly UILayer uiLayer;
+        public readonly Type PanelType;
+        public readonly string PrefabPath;
+        public readonly UILayer UILayer;
         public PanelConfig(Type panelType, string prefabPath, UILayer uiLayer)
         {
-            this.panelType = panelType;
-            this.prefabPath = UIConst.UIPanelFolder + prefabPath;
-            this.uiLayer = uiLayer;
+            PanelType = panelType;
+            PrefabPath = UIConst.UIPanelFolder + prefabPath;
+            UILayer = uiLayer;
         }
     }
     
@@ -26,8 +26,14 @@ namespace UI
         {
             PanelConfigDict = new Dictionary<Type, PanelConfig>();
             AddPanelConfig(new PanelConfig(
-                typeof(TestPanel),
-                "TestPanel.prefab",
+                typeof(StartPanel),
+                "StartPanel.prefab",
+                UILayer.Base
+                )
+            );
+            AddPanelConfig(new PanelConfig(
+                typeof(MainPanel),
+                "MainPanel.prefab",
                 UILayer.Pop
                 )
             );
@@ -35,7 +41,7 @@ namespace UI
 
         private static void AddPanelConfig(PanelConfig panelConfig)
         {
-            PanelConfigDict.Add(panelConfig.panelType, panelConfig);
+            PanelConfigDict.Add(panelConfig.PanelType, panelConfig);
         }
         
         public static PanelConfig GetPanelConfig(Type panelType)
@@ -44,7 +50,7 @@ namespace UI
             {
                 return panelConfig;
             }
-            throw new Exception(panelType +"PanelConfig not found!");
+            throw new Exception(panelType + "PanelConfig not found!");
         }
     }
 }

@@ -1,118 +1,81 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
+using Object = UnityEngine.Object;
 
 namespace FrameWork.Manager
 {
-    public interface IObjectPool<T> where T : Object
+    public class PoolManager : BaseManager
     {
-        void PushObj(T obj);
-        T GetObj();
-        bool DoHava();
-    }
-    
-    public abstract class ObjectPool<T> : IObjectPool<T> where T : Object
-    {
-        protected Queue<T> objQueuePool = new();
+        private readonly Dictionary<string, ObjectPool<GameObject>> _gameObjectPoolDic = new();
 
-        public virtual void PushObj(T obj)
-        {
-            objQueuePool.Enqueue(obj);
-        }
+        private readonly Transform _poolRoot;
         
-        public virtual T GetObj() { return default;}
-        
-        public virtual bool DoHava()
+        public PoolManager()
         {
-            return objQueuePool.Count >0;
+            var goRoot = new GameObject("GameObjectPool");
+            _poolRoot = goRoot.transform;
+            Object.DontDestroyOnLoad(goRoot);
         }
 
-        public virtual void Clear()
+        private ObjectPool<GameObject> CreateGameObjectPool(string path)
         {
-            objQueuePool.Clear();
-            objQueuePool = null;
-        }
-    }
-
-    public class GameObjectPool : ObjectPool<GameObject>
-    {
-        private readonly GameObject _fatherGameObject;
-        
-        public GameObjectPool(GameObject poolRoot,string poolRootName)
-        {
-            _fatherGameObject = new GameObject
+            var lastSlashIndex = path.LastIndexOf("/", StringComparison.Ordinal) + 1;
+            var name = path[lastSlashIndex..];
+            var poolFather = new GameObject(name + "_Pool");
+            poolFather.transform.SetParent(_poolRoot.transform);
+            return new ObjectPool<GameObject>(CreateFunc, ActionOnGet,ActionOnRelease, ActionOnDestroy);
+            
+            GameObject CreateFunc()
             {
-                name = poolRootName+"s-Pool"
-            };
-            _fatherGameObject.transform.SetParent(poolRoot.transform);
-        }
-        
-        public override void PushObj(GameObject obj)
-        {
-            base.PushObj(obj);
-            obj.transform.SetParent(_fatherGameObject.transform);
-            obj.SetActive(false);
-        }
-        
-        public override GameObject GetObj()
-        {
-            var gameObject = objQueuePool.Dequeue();
-            gameObject.transform.SetParent(null);
-            gameObject.SetActive(true);
-            return gameObject;
-        }
+                var go = AppFacade.AssetLoadManager.Load<GameObject>(path);
+                go.name = name;
+                return go;  
+            }
+            
+            void ActionOnGet(GameObject go)
+            {
+                go.transform.SetParent(null);
+                go.SetActive(true);
+            }
+            
+            void ActionOnRelease(GameObject go)
+            {
+                go.SetActive(false);
+                go.transform.SetParent(poolFather.transform);
+            }
 
-        public override void Clear()
-        {
-            foreach (var go in objQueuePool)
+            void ActionOnDestroy(GameObject go)
             {
                 Object.Destroy(go);
             }
-            Object.Destroy(_fatherGameObject);
-            base.Clear();
-        }
-    }
-
-
-    public class PoolManager : BaseManager
-    {
-        private readonly Dictionary<string,GameObjectPool> _gameObjectPoolDic = new();
-
-        private GameObject _poolFather;
-        
-        public GameObject GetObj(string name)
-        {
-            if (_gameObjectPoolDic.TryGetValue(name, out var gameObjectPool) && gameObjectPool.DoHava())
-            {
-                return _gameObjectPoolDic[name].GetObj();
-            }
-            
-            var gameObject=AppFacade.ResManager.Load<GameObject>(name);
-            gameObject.name = name;
-            return gameObject;
         }
         
-        public void PushObj(string name,GameObject obj) {
-            if (_poolFather == null)
+        public GameObject Get(string path)
+        {
+            if (!_gameObjectPoolDic.TryGetValue(path, out var gameObjectPool))
             {
-                _poolFather = new GameObject("GameObjectPool");
+                gameObjectPool = CreateGameObjectPool(path);
+                _gameObjectPoolDic.Add(path, gameObjectPool);
             }
-            //里面有记录这个键
-            if (_gameObjectPoolDic.TryGetValue(name, out var gameObj))
-            {
-                gameObj.PushObj(obj);
-            }
-            else 
-            {
-                _gameObjectPoolDic.Add(name, new GameObjectPool(_poolFather, name));
-                _gameObjectPoolDic[name].PushObj(obj);
-            }
+            return gameObjectPool.Get();
         }
 
-        public void Clear()
-        {
-            foreach (var pool in _gameObjectPoolDic)
+        public void Push(string name, GameObject obj) {
+            if (!_gameObjectPoolDic.TryGetValue(name, out var gameObjectPool))
             {
-                pool.Value.Clear();
+                gameObjectPool = CreateGameObjectPool(name);
+                _gameObjectPoolDic.Add(name, gameObjectPool);
+            }
+            gameObjectPool.Release(obj);
+        }
+
+        private void Clear()
+        {
+            foreach (var (_, pool) in _gameObjectPoolDic)
+            {
+                pool.Dispose();
             }
             _gameObjectPoolDic.Clear();
         }
@@ -120,7 +83,7 @@ namespace FrameWork.Manager
         public override void Destroy()
         {
             Clear();
-            Object.Destroy(_poolFather);
+            Object.Destroy(_poolRoot);
         }
     }
 }

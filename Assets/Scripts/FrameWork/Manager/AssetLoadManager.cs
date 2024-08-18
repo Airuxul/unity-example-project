@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace FrameWork.Manager
 {
     //资源加载模块
-    public class ResManager : BaseManager
+    public class AssetLoadManager : BaseManager
     {
         //同步加载资源
         public T Load<T>(string path) where T : Object
@@ -31,6 +33,11 @@ namespace FrameWork.Manager
         {
 #if UNITY_EDITOR
             T res = AssetDatabase.LoadAssetAtPath<T>(path);
+            if (res == null)
+            {
+                Debug.LogError("资源不存在：" + path);
+                yield break;
+            }
             AssetDatabase.TryGetGUIDAndLocalFileIdentifier(res, out string guid, out long localId);
             var op = AssetDatabase.LoadObjectAsync(path, localId);
             while (!op.isDone)
