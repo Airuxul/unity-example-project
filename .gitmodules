@@ -1,0 +1,3 @@
+[submodule "Packages/unity-game-core"]
+	path = Packages/unity-game-core
+	url = https://github.com/Airuxul/unity-game-core

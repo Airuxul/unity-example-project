@@ -51,9 +51,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.custom.gamecore": {
-      "version": "file:../CustomPackages/unity-game-core",
+      "version": "file:unity-game-core",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.ext.nunit": {
